@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class MoedasDetalhePage extends StatefulWidget {
   // criei a variavel moeda
   final Moeda moeda;
-  final Moeda preco;
+
                                     // adicionei a variável ao construtor da pagina
                                     // ele vai esperar para receber esse parametro de outra pagina
-  const MoedasDetalhePage({Key? key, required this.moeda, required this.preco}) : super(key: key);
+  const MoedasDetalhePage({Key? key, required this.moeda}) : super(key: key);
 
   @override
   _MoedasDetalhePageState createState() => _MoedasDetalhePageState();
