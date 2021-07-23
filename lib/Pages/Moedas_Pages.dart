@@ -1,4 +1,5 @@
 import 'package:criptomoeda/Model/Moeda.dart';
+import 'package:criptomoeda/Pages/Moedas_Detalhes_Page.dart';
 import 'package:criptomoeda/Repositorios/Repositorios.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -44,6 +45,17 @@ class _MoedasPageState extends State<MoedasPage> {
         ),
       );
     }
+  }
+
+  // aqui passamos como parametro a moeda selecionada
+  mostrarDetalhes(Moeda moeda, Moeda preco){
+
+    Navigator.push(context, MaterialPageRoute(
+        // aqui indicamos a pagina e passamos como parametro para a proxima o valor escolhido
+        // no caso "moeda" que definimos
+        builder:(_)=>MoedasDetalhePage(moeda: moeda, preco: preco,) )
+    );
+
   }
 
   @override
@@ -92,6 +104,7 @@ class _MoedasPageState extends State<MoedasPage> {
                     );
                   });
                 },
+                onTap: () => mostrarDetalhes(tabela[moeda], tabela[moeda]),
               );
             },
             separatorBuilder: (__, ___) => Divider(),
