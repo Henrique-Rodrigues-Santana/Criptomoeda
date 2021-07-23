@@ -16,12 +16,52 @@ class _MoedasPageState extends State<MoedasPage> {
   NumberFormat real = NumberFormat.currency(locale: 'pt_br',name: 'R\$');
   List<Moeda> selecionadas = [];
 
+  AppBarDinamica(){
+    if(selecionadas.isEmpty){
+      return AppBar(
+        title: Text("Criptomoedas"),
+      );
+    }else{
+      return AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            setState(() {
+              selecionadas = [];
+            });
+          },
+        ),
+        title: Text("${selecionadas.length} Selecionadas"),
+        backgroundColor: Colors.blueGrey[50],
+        elevation: 1,
+        iconTheme: IconThemeData(color: Colors.black87),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+            fontSize: 20
+          )
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Criptomoedas"),
-        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: selecionadas.isNotEmpty
+          ? FloatingActionButton.extended(
+          onPressed: (){},
+          label: Text("favoritar",style: TextStyle(
+            letterSpacing: 0,
+            fontWeight: FontWeight.bold,
+          ),
+          ),
+        icon: Icon(Icons.star),
+      )
+          : null,
+        appBar: AppBarDinamica(),
         body: ListView.separated(
             padding: EdgeInsets.all(16),
             itemBuilder: (context, moeda) {
@@ -56,5 +96,6 @@ class _MoedasPageState extends State<MoedasPage> {
             },
             separatorBuilder: (__, ___) => Divider(),
             itemCount: tabela.length));
+
   }
 }
