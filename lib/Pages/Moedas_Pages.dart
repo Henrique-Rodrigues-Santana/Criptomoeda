@@ -1,8 +1,10 @@
 import 'package:criptomoeda/Model/Moeda.dart';
 import 'package:criptomoeda/Pages/Moedas_Detalhes_Page.dart';
+import 'package:criptomoeda/Repositorios/Favoritas_Repositorios.dart';
 import 'package:criptomoeda/Repositorios/Repositorios.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MoedasPage extends StatefulWidget {
   const MoedasPage({Key? key}) : super(key: key);
@@ -16,6 +18,13 @@ class _MoedasPageState extends State<MoedasPage> {
   final tabela = MoedasRepositorio.tabela;
   NumberFormat real = NumberFormat.currency(locale: 'pt_br',name: 'R\$');
   List<Moeda> selecionadas = [];
+  late FavoritasRepositorios favoritas;
+
+  limparSelecionadas(){
+    setState(() {
+      selecionadas = [];
+    });
+  }
 
   AppBarDinamica(){
     if(selecionadas.isEmpty){
@@ -60,11 +69,15 @@ class _MoedasPageState extends State<MoedasPage> {
 
   @override
   Widget build(BuildContext context) {
+    favoritas = Provider.of<FavoritasRepositorios>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: selecionadas.isNotEmpty
           ? FloatingActionButton.extended(
-          onPressed: (){},
+          onPressed: (){
+            favoritas.safAll(selecionadas);
+            limparSelecionadas();
+          },
           label: Text("favoritar",style: TextStyle(
             letterSpacing: 0,
             fontWeight: FontWeight.bold,
@@ -89,9 +102,15 @@ class _MoedasPageState extends State<MoedasPage> {
                   child: Image.asset(tabela[moeda].icone),
                   width: 40,
                 ),
-                title: Text(
-                  tabela[moeda].nome,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                title: Row(
+                  children: [
+                    Text(
+                      tabela[moeda].nome,
+                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                    if(favoritas.lista.contains(tabela[moeda]))
+                      Icon(Icons.circle,color: Colors.amber, size: 8,)
+                  ],
                 ),
                 trailing: Text(real.format(tabela[moeda].preco)),
                 selected: selecionadas.contains(tabela[moeda]),
