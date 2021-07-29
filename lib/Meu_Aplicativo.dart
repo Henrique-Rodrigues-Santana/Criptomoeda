@@ -1,3 +1,4 @@
+import 'package:criptomoeda/Pages/HomePage.dart';
 import 'package:criptomoeda/Pages/Moedas_Pages.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _MeuAppState extends State<MeuApp> {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: MoedasPage(),
+      home: HomePage(),
     );
   }
 }
