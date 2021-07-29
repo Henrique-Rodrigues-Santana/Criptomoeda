@@ -1,3 +1,5 @@
+
+import 'package:criptomoeda/Configs/app_settings.dart';
 import 'package:criptomoeda/Model/Moeda.dart';
 import 'package:criptomoeda/Pages/Moedas_Detalhes_Page.dart';
 import 'package:criptomoeda/Repositorios/Favoritas_Repositorios.dart';
@@ -16,9 +18,35 @@ class MoedasPage extends StatefulWidget {
 class _MoedasPageState extends State<MoedasPage> {
   
   final tabela = MoedasRepositorio.tabela;
-  NumberFormat real = NumberFormat.currency(locale: 'pt_br',name: 'R\$');
+  late NumberFormat real ;
+  late Map<String,String> loc;
   List<Moeda> selecionadas = [];
   late FavoritasRepositorios favoritas;
+
+  readNumberFormat(){
+    loc = context.watch<AppSettings>().locale;
+    real = NumberFormat.currency(locale: loc['locale'],name: loc['name']);
+  }
+
+  changeLanguageButton(){
+    final locale = loc['locale'] == 'pt_BR' ? 'en_US' : 'pt_BR';
+    final name = loc['locale'] ==  'pt_BR' ? '\$' :  'R\$';
+
+    return PopupMenuButton(
+      icon: Icon(Icons.language),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+            child: ListTile(
+              leading: Icon(Icons.swap_vert_circle),
+              title: Text('Usar $locale'),
+              onTap: () {
+               context.read<AppSettings>().setLocale(locale,name);
+              },
+            ))
+      ] ,
+    );
+
+  }
 
   limparSelecionadas(){
     setState(() {
@@ -30,6 +58,9 @@ class _MoedasPageState extends State<MoedasPage> {
     if(selecionadas.isEmpty){
       return AppBar(
         title: Text("Criptomoedas"),
+        actions: [
+          changeLanguageButton()
+        ],
       );
     }else{
       return AppBar(
@@ -69,6 +100,7 @@ class _MoedasPageState extends State<MoedasPage> {
 
   @override
   Widget build(BuildContext context) {
+    readNumberFormat();
     favoritas = Provider.of<FavoritasRepositorios>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
