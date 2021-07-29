@@ -3,9 +3,12 @@ import 'package:criptomoeda/Repositorios/Favoritas_Repositorios.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'Configs/Hive_Config.dart';
 import 'Meu_Aplicativo.dart';
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveConfig.start();
   runApp(
       MultiProvider(
         providers: [
